@@ -1,0 +1,4 @@
+- Install does smart backup (check has of file, backup if changed, or just backup)
+- Include powerline fonts and potentially install
+- include the terminal.app config
+- Have an uninstall script (that works with the backup)

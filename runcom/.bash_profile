@@ -1,0 +1,61 @@
+#
+# credits
+# https://github.com/mathiasbynens/dotfiles
+
+# If not interactive, do nothing
+[ -z "$PS1" ] && return
+
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+
+OS="$(uname -s)"
+
+# Resolve DOTFILES_DIR (assuming ~/.dotfiles on distros without readlink and/or $BASH_SOURCE/$0)
+READLINK=$(which greadlink || which readlink)
+CURRENT_SCRIPT=$BASH_SOURCE
+
+if [[ -n $CURRENT_SCRIPT && -x "$READLINK" ]]; then
+  SCRIPT_PATH=$($READLINK -f "$CURRENT_SCRIPT")
+  DOTFILES_DIR=$(dirname "$(dirname "$SCRIPT_PATH")")
+elif [ -d "$HOME/.dotfiles" ]; then
+  DOTFILES_DIR="$HOME/dotfiles"
+else
+  echo "Unable to find dotfiles, exiting."
+  return # `exit 1` would quit the shell itself
+fi
+
+# now source our dotfiles
+
+for DOTFILE in "$DOTFILES_DIR"/system/{functions,function_*,path,env,alias,completion,grep,prompt,nvm,rvm,custom}.sh; do
+  [ -f "$DOTFILE" ] && . "$DOTFILE"
+done
+
+# run os specific files
+
+for DOTFILE in "$DOTFILES_DIR"/system/*."$OS"; do
+    . "$DOTFILE"
+done
+
+# source bash completion files
+
+for COMPLETION in "$DOTFILES_DIR"/completions/*.bash; do
+    [ -f "$COMPLETION" ] && . "$COMPLETION"
+done
+
+# virtualenv wrapper
+
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+    source /usr/local/bin/virtualenvwrapper.sh
+fi
+
+# Set LSCOLORS
+
+eval "$(dircolors "$DOTFILES_DIR"/system/dir_colors)"
+
+# enlighten me
+if $(is-executable fortune); then
+    echo ""
+    fortune
+    echo ""
+fi
