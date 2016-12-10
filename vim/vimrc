@@ -23,6 +23,8 @@ if has("autocmd")
 	autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
 	" Treat .md files as Markdown
 	autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+    " automatically resize splits
+    autocmd VimResized * wincmd =
 endif
 
 " Change mapleader from \ to ,
@@ -71,6 +73,11 @@ set backspace=indent,eol,start  " backspace over everything
 "let g:indentLine_color_gui = '#09AA08'
 "let g:indentLine_char = '|'
 
+" wrap MD files at 90 characters
+" autocmd FileType markdown setlocal textwidth=90 formatoptions+=t
+autocmd FileType markdown setlocal formatoptions+=t
+
+ 
 "
 " files (nerdtree, ctrlp, etc...)
 "
@@ -102,6 +109,11 @@ let g:ctrlp_custom_ignore = {
 " toggle search highlights
 nnoremap <ENTER> :set hlsearch!<CR>
 
+"nnoremap <F5> :set hls<CR>:exec "let @/='\\<".expand("<cword>")."\\>'"<CR>
+"nnoremap <CR> :nohls<CR>
+"nnoremap <F6> :set nonu<CR>
+
+
 " no need to press shift to enter command mode
 nnoremap ; :
 " move up/down into wrapped lines (instead of to starting line)
@@ -123,6 +135,25 @@ nnoremap <leader>s <C-w>s<C-w>j
 "
 " Macros
 "
+
+
+" Toggle background, default set to dark
+let g:solarized_style="light"
+function! ToggleBackground()
+    if (g:solarized_style=="dark")
+        let g:solarized_style="light"
+        set background=light
+    else
+        let g:solarized_style="dark"
+        set background=dark
+    endif
+endfunction
+command! Togbg call ToggleBackground()
+nnoremap <F5> :call ToggleBackground()<CR>
+inoremap <F5> <ESC>:call ToggleBackground()<CR>a
+vnoremap <F5> <ESC>:call ToggleBackground()<CR>v
+ 
+
 
 " create a line of "===" below current line
 nnoremap <leader>1 yypVr=
