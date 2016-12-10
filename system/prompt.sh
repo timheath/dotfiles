@@ -65,7 +65,13 @@ find_git_dirty() {
 
 # different prompt for Darwin and Linux
 PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
-export PS1="\u:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]> "
+OS=$(uname -s)
+if [ "$OS" = "Darwin" ]; then
+    export PS1="\u:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]> "
+else
+    export PS1="\u@\h:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]> "
+fi
+
 
     #export PS1="\h:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]> "
 
