@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Credits to github.com/webpro/dotfiles and github.com/orrsella/dotfiles
+# Inspired/ripped from github.com/webpro/dotfiles and github.com/orrsella/dotfiles
 #
 
 # Get current dir (so run this script from anywhere)
@@ -16,13 +16,17 @@ OS="$(uname -s)"
 #[ -d "$DOTFILES_DIR/.git" ] && git --work-tree="$DOTFILES_DIR" --git-dir="$DOTFILES_DIR/.git" pull origin master
 
 # Bunch of symlinks
-ln -sfv "$DOTFILES_DIR/vim/.vimrc" ~
-ln -sfv "$DOTFILES_DIR/runcom/.bash_profile" ~
-ln -sfv "$DOTFILES_DIR/runcom/.inputrc" ~
+ln -sfv "$DOTFILES_DIR/vim/vimrc" ~/.vimrc
+ln -sfv "$DOTFILES_DIR/runcom/bash_profile" ~/.bash_profile
+ln -sfv "$DOTFILES_DIR/runcom/inputrc" ~/.inputrc
+ln -sfv "$DOTFILES_DIR/ssh/config" ~/.ssh/config
 
-if [ "$OS" = "Linux" ]; then
+if [ "$OS" == "Linux" ]; then
     printf "\nInstalling Linux dependencies...\n"
     $DOTFILES_DIR/bin/rhinstall.sh
+elif [ "$OS" == "Darwin" ]; then
+    printf "\nInstalling OS X dependencies...\n"
+    $DOTFILES_DIR/bin/darwin-install.sh
 fi
 
 printf "\nInstall VIM plugins...\n"

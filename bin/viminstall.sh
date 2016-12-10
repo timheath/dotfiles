@@ -15,21 +15,21 @@ cd $BUNDLE
 git clone https://github.com/scrooloose/nerdtree.git 
 git clone https://github.com/kien/ctrlp.vim.git 
 git clone https://github.com/altercation/vim-colors-solarized.git 
-git clone https://github.com/edkolev/promptline.vim.git 
-git clone https://github.com/mikelue/vim-maven-plugin.git
+#git clone https://github.com/edkolev/promptline.vim.git 
+#git clone https://github.com/mikelue/vim-maven-plugin.git
 
 # Git
 
 git clone https://github.com/tpope/vim-fugitive.git
 git clone https://github.com/vim-airline/vim-airline.git
-git clone https://github.com/airblade/vim-gitgutter.git
+#git clone https://github.com/airblade/vim-gitgutter.git
 
 # Syntax, hightlighting, and format
+git clone https://github.com/vim-scripts/loremipsum.git
+#git clone https://github.com/scrooloose/syntastic.git 
+#git clone https://github.com/Raimondi/delimitMate.git 
 
-git clone https://github.com/scrooloose/syntastic.git 
-git clone https://github.com/altercation/vim-colors-solarized.git
-git clone https://github.com/Raimondi/delimitMate.git 
-[ "$OS" = "Darwin" ] &&  git clone https://github.com/axiaoxin/vim-json-line-format.git
+# [ "$OS" = "Darwin" ] &&  git clone https://github.com/axiaoxin/vim-json-line-format.git
 
 # Completion & snippets
 
