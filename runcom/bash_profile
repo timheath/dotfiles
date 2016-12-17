@@ -34,7 +34,7 @@ done
 # run os specific files
 
 for DOTFILE in "$DOTFILES_DIR"/system/*."$OS"; do
-    . "$DOTFILE"
+    [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 
 # source bash completion files
