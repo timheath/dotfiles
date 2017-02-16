@@ -16,3 +16,4 @@ set skip-completed-text on
 
 # list all matches in case multiple completions are possible
 set show-all-if-ambiguous on
+

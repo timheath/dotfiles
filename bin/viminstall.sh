@@ -12,24 +12,25 @@ cd $BUNDLE
 
 # Colors and utils
 
-git clone https://github.com/scrooloose/nerdtree.git 
-git clone https://github.com/kien/ctrlp.vim.git 
-git clone https://github.com/altercation/vim-colors-solarized.git 
-#git clone https://github.com/edkolev/promptline.vim.git 
-#git clone https://github.com/mikelue/vim-maven-plugin.git
+git clone https://github.com/scrooloose/nerdtree.git $BUNDLE/nerdtree
+git clone https://github.com/kien/ctrlp.vim.git $BUNDLE/ctrlp.vim
+git clone https://github.com/altercation/vim-colors-solarized.git $BUNDLE/vim-colors-solarized
+git clone https://github.com/edkolev/promptline.vim.git $BUNDLE/promptline.vim
 
 # Git
 
 git clone https://github.com/tpope/vim-fugitive.git
 git clone https://github.com/vim-airline/vim-airline.git
-#git clone https://github.com/airblade/vim-gitgutter.git
 
 # Syntax, hightlighting, and format
-git clone https://github.com/vim-scripts/loremipsum.git
-#git clone https://github.com/scrooloose/syntastic.git 
-#git clone https://github.com/Raimondi/delimitMate.git 
+git clone https://github.com/vim-scripts/loremipsum.git $BUNDLE/loremipsum
+git clone https://github.com/scrooloose/syntastic.git $BUNDLE/syntastic
+git clone https://github.com/Raimondi/delimitMate.git $BUNDLE/delimitMate
+git clone https://github.com/fatih/vim-go.git $BUNDLE/vim-go
+git clone https://github.com/AndrewRadev/splitjoin.vim.git $BUNDLE/splitjoin.vim
+git clone https://github.com/SirVer/ultisnips.git $BUNDLE/ultisnips
 
-# [ "$OS" = "Darwin" ] &&  git clone https://github.com/axiaoxin/vim-json-line-format.git
+[ "$OS" = "Darwin" ] &&  git clone https://github.com/axiaoxin/vim-json-line-format.git
 
 # Completion & snippets
 
