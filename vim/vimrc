@@ -90,6 +90,7 @@ set backspace=indent,eol,start  " backspace over everything
 
 set autowrite        " automatically write file contents when running make
 
+set noswapfile
 "
 " supertab / jedi-vim integration
 "
@@ -100,6 +101,9 @@ set autowrite        " automatically write file contents when running make
 "let g:indentLine_color_term = 239
 "let g:indentLine_color_gui = '#09AA08'
 "let g:indentLine_char = '|'
+
+" Toggle light/dark with F5
+call togglebg#map("<F5>")
 
 "
 " files (nerdtree, ctrlp, etc...)
@@ -131,14 +135,16 @@ let g:ctrlp_custom_ignore = {
 
 " toggle search highlights
 nnoremap <ENTER> :set hlsearch!<CR>
+nnoremap <CR> :set hlsearch!<CR>
 
 " no need to press shift to enter command mode
 nnoremap ; :
 " move up/down into wrapped lines (instead of to starting line)
 nnoremap j gj
 nnoremap k gk
+
 " jj instead of <ESC> to exist insert mode
-inoremap jj <ESC>
+"inoremap jj <ESC>
 
 " close quick fix split
 nnoremap <leader>a :cclose<CR>
