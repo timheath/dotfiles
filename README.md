@@ -4,9 +4,7 @@ and may overwrite your configuration files!
 
 Feel free to take anything useful but you should look at much better examples 
 from [Lars Kappert](https://github.com/webpro/dotfiles) and 
-[Orr Sella](https://github.com/orrsella/dotfiles).  This repo is essentially a
-fork of what [Lars](https://github.com/webpro/dotfiles) put together but with
-less functionality.
+[Orr Sella](https://github.com/orrsella/dotfiles).  This repo steals heavily from what [Lars](https://github.com/webpro/dotfiles) put together.
 
 
 ## Installion
