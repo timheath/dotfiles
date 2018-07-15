@@ -6,6 +6,7 @@ alias ll='ls -l --time-style=+"%Y-%m-%d %H:%M:%S" --color -h -a'
 alias lsz='ls -l | sort -k5'
 alias ls='ls --color'
 alias lt='ls -ltrh'
+alias la="ls -R |grep \":$\" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -27,3 +28,5 @@ alias reload="exec $SHELL -l"
 alias notes='vi ~/Notes'
 alias toto='vi ~/Notes/todo.md'  # easier to type than todo
 alias todo='vi ~/Notes/todo.md'  # easier to type than todo
+
+alias golang='cd $GOPATH/src/github.com/timheath'
