@@ -112,6 +112,7 @@ dfgrep() {
 }
 
 # TODO have Darwin only functions
+# Credit: https://www.ostricher.com/2015/08/from-markdown-to-pastable-formatted-text-in-os-x-terminal/
 # Render markdown file and copy into system buffer (OSX only)
 mdcopy() {
     if [ -f $1 ] && [ $(uname) == "Darwin" ]; then
