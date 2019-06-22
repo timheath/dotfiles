@@ -111,3 +111,17 @@ dfgrep() {
   grep -iR "$@" * | grep -v "Binary" | sed 's/:/ /g' | awk '{ print $1 }' | sort | uniq
 }
 
+# TODO have Darwin only functions
+# Render markdown file and copy into system buffer (OSX only)
+mdcopy() {
+    if [ -f $1 ] && [ $(uname) == "Darwin" ]; then
+        cat $1 | pandoc --from markdown_github --to html | textutil -convert rtf -stdin -stdout -format html| pbcopy -Prefer rtf
+    fi
+}
+
+# TODO create a quick function to convert to html which doesn't lose formatting like rtf
+# md2html() {
+#     if [ -f $1 ] && [ $(uname) == "Darwin" ]; then
+#         cat $1 | pandoc --from markdown_github --to html | textutil -convert rtf -stdin -stdout -format html| pbcopy -Prefer rtf
+#     fi
+# }
