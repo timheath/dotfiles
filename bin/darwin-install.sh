@@ -30,3 +30,6 @@ if [ -d /Applications/Docker.app/Contents/Resources/etc ]; then
     ln -s /Applications/Docker.app/Contents/Resources/etc/docker-machine.bash-completion $DOTFILES_DIR/completions/docker-machine.bash
     ln -s /Applications/Docker.app/Contents/Resources/etc/docker-compose.bash-completion $DOTFILES_DIR/completions/docker-compose.bash
 fi
+
+echo "Please check bin/darwin-install.sh for homebrew installs that need to be run"
+# brew install tmux

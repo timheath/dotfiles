@@ -113,6 +113,10 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_go_checkers = ['govet', 'errcheck', 'go']
 
+" syntastic c++ settings
+let g:syntastic_cpp_compiler = "g++"
+let g:syntastic_cpp_compiler_options = "-std=c++11 -Wall -Wextra"
+
 " Toggle light/dark with F5
 call togglebg#map("<F5>")
 

@@ -37,11 +37,18 @@ for DOTFILE in "$DOTFILES_DIR"/system/*."$OS"; do
     [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 
-# source bash completion files
+# source bash completion files from Homebrew
+for COMPLETION in /usr/local/etc/bash_completion.d/*.bash; do
+    [ -f "$COMPLETION" ] && . "$COMPLETION"
+done
+unset COMPLETION
 
+# Source my local bash completion files
 for COMPLETION in "$DOTFILES_DIR"/completions/*.bash; do
     [ -f "$COMPLETION" ] && . "$COMPLETION"
 done
+unset COMPLETION
+
 
 # virtualenv wrapper
 
