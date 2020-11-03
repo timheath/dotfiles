@@ -14,8 +14,10 @@ colorscheme solarized
 set laststatus=2     " Airline status bar always visible
 let g:airline_powerline_fonts = 1    " Enable powerline symbols
 
+" Use deoplete
+let g:deoplete#enable_at_startup = 1
+
 " File specific actions
-"au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown   " markdown highlighting for .md files
 if has("autocmd")
 	" Enable file type detection
 	filetype on
@@ -31,27 +33,27 @@ endif
 
 " [b]uild, [r]un, [t]est go code
 " runs :GoBuild or :GoTestCompile based on the go file
-function! s:build_go_files()
-    let l:file = expand('%')
-    if l:file =~# '^\f\+_test\.go$'
-        call go#cmd#Test(0, 1)
-    elseif l:file =~# '^\f\+\.go$'
-        call go#cmd#Build(0)
-    endif
-endfunction
-
-autocmd FileType go nmap <leader>b  :<C-u>call <SID>build_go_files()<CR>
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
-autocmd FileType go nmap <leader>t  <Plug>(go-test)
-autocmd FileType go nmap <leader>c  <Plug>(go-coverage-toggle)
+"function! s:build_go_files()
+"    let l:file = expand('%')
+"    if l:file =~# '^\f\+_test\.go$'
+"        call go#cmd#Test(0, 1)
+"    elseif l:file =~# '^\f\+\.go$'
+"        call go#cmd#Build(0)
+"    endif
+"endfunction
+"
+"autocmd FileType go nmap <leader>b  :<C-u>call <SID>build_go_files()<CR>
+"autocmd FileType go nmap <leader>r  <Plug>(go-run)
+"autocmd FileType go nmap <leader>t  <Plug>(go-test)
+"autocmd FileType go nmap <leader>c  <Plug>(go-coverage-toggle)
 
 " Open alternate file (either in current window or a split
-autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+"autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+"autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
 
 " run goimports instead of gofmt on save (can disable and manually use
 " :GoImports if too slow
-let g:go_fmt_command = "goimports"
+"let g:go_fmt_command = "goimports"
 
 " Change mapleader from \ to ,
 let mapleader=","
@@ -63,7 +65,7 @@ let maplocalleader="\\"
 set ttyfast          " optimze for fast terminals
 set title            " show filename in window titlebar
 set number           " enable line numbers
-set cul              " highlight cursor line
+"set cul              " highlight cursor line
 set scrolloff=3      " start scrolling 3 lines before border
 "set colorcolumn=90   " highlight end of line
 "set nowrap           " don't wrap lines
@@ -78,10 +80,9 @@ set autoindent       " not sure
 
 set hlsearch         " highlight search terms
 set incsearch        " show search matches as you type
-set ignorecase       " ignore case when searching
+"set ignorecase       " ignore case when searching
 set smartcase        " ignore case if search is all lowercase, case sesnitive othewise
 "set gsearch          " replace all occurences on current line, by default
-set scrolloff=4      " keep 4 lines on edge of screen while scrolling
 
 set wildmenu         " when using tab to autocomplete filenames, will show horizontal list of prev/next matches
 set clipboard=unnamed
@@ -93,15 +94,24 @@ set autowrite        " automatically write file contents when running make
 set noswapfile
 
 "
+" Set cursor style
+"
+" 1 -> blinking block, 2 -> steady block, 3 -> blinking underline
+" 4 -> steady underline, 5 -> blinking bar, 6 -> steady bar
+let &t_SI = "\e[6 q"   " steady bar for insert mode
+let &t_EI = "\e[2 q"   " steady block cursor in command mode
+
+"
 " supertab / jedi-vim integration
 "
 "let g:SuperTabDefaultCompletionType = "context"
 "let g:jedi#popup_on_dot = 0
 
 " vertical line indentation
-"let g:indentLine_color_term = 239
-"let g:indentLine_color_gui = '#09AA08'
-"let g:indentLine_char = '|'
+let g:indentLine_color_term = 239
+let g:indentLine_color_gui = '#09AA08'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+" let g:indentLine_char = '|'
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -117,8 +127,8 @@ let g:syntastic_go_checkers = ['govet', 'errcheck', 'go']
 let g:syntastic_cpp_compiler = "g++"
 let g:syntastic_cpp_compiler_options = "-std=c++11 -Wall -Wextra"
 
-" Toggle light/dark with F5
-call togglebg#map("<F5>")
+" Toggle light/dark with F7
+call togglebg#map("<F7>")
 
 "
 " files (nerdtree, ctrlp, etc...)
@@ -129,7 +139,7 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " NerdTree close vim if nothing else open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " <leader>t to open ctrlp
 let g:ctrlp_map = '<leader>f'
@@ -164,10 +174,10 @@ nnoremap k gk
 nnoremap <leader>a :cclose<CR>
 
 " easily move between splits
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+"nnoremap <C-J> <C-W><C-J>
+"nnoremap <C-K> <C-W><C-K>
+"nnoremap <C-L> <C-W><C-L>
+"nnoremap <C-H> <C-W><C-H>
 
 " scroll screen with intuitive up/down nav keys
 nnoremap <C-j> <C-e>
@@ -193,8 +203,8 @@ autocmd VimResized * wincmd =
 " Macros
 "
 
-" create a line of "===" below current line
-nnoremap <leader>1 yypVr=
+" create a line of "---" below current line
+nnoremap <leader>1 yypVr-
 " strip all trailing whitespace
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 

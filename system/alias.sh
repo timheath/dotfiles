@@ -1,3 +1,6 @@
+# dev shortcuts
+alias kata='cd ~/dev/projects/cpp-kata'
+
 alias sshkey='cat ~/.ssh/id_rsa.pub | pbcopy'
 alias vi='vim'   
 alias path='echo $PATH | tr ":" "\n" | sort'

@@ -52,9 +52,9 @@ unset COMPLETION
 
 # virtualenv wrapper
 
-if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-    source /usr/local/bin/virtualenvwrapper.sh
-fi
+#if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+#    source /usr/local/bin/virtualenvwrapper.sh
+#fi
 
 # Set LSCOLORS
 
