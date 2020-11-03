@@ -2,7 +2,8 @@
 alias kata='cd ~/dev/projects/cpp-kata'
 
 alias sshkey='cat ~/.ssh/id_rsa.pub | pbcopy'
-alias vi='vim'   
+#alias vi='vim'   
+alias vi='nvim'   
 alias path='echo $PATH | tr ":" "\n" | sort'
 
 alias ll='ls -l --time-style=+"%Y-%m-%d %H:%M:%S" --color -h -a'
