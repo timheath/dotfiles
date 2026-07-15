@@ -1,35 +1,43 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 #
-# Darwin customization and base package install
+# Darwin: ensure Homebrew, then install base packages
 #
 
-# debug mode
-#set -x
-
-# Resolve DOTFILES_DIR (assuming ~/.dotfiles on distros without readlink and/or $BASH_SOURCE/$0)
-READLINK=$(command -v greadlink || command -v readlink)
-CURRENT_SCRIPT=$BASH_SOURCE
-
-if [[ -n $CURRENT_SCRIPT && -x "$READLINK" ]]; then
-    SCRIPT_PATH=$($READLINK -f "$CURRENT_SCRIPT")
-    DOTFILES_DIR=$(dirname "$(dirname "$SCRIPT_PATH")")
-elif [ -d "$HOME/.dotfiles" ]; then
-    printf "we are defaulting"
-    DOTFILES_DIR="$HOME/dotfiles"
-else
-    echo "Unable to find dotfiles, exiting."
-    return # `exit 1` would quit the shell itself
+# --- ensure Homebrew ---
+if ! command -v brew >/dev/null 2>&1; then
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  else
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+      eval "$(/usr/local/bin/brew shellenv)"
+    fi
+  fi
 fi
 
-source $DOTFILES_DIR/system/functions.sh
-
-# Setup links to Docker for bash completions
-if [ -d /Applications/Docker.app/Contents/Resources/etc ]; then
-    ln -s /Applications/Docker.app/Contents/Resources/etc/docker.bash-completion $DOTFILES_DIR/completions/docker.bash
-    ln -s /Applications/Docker.app/Contents/Resources/etc/docker-machine.bash-completion $DOTFILES_DIR/completions/docker-machine.bash
-    ln -s /Applications/Docker.app/Contents/Resources/etc/docker-compose.bash-completion $DOTFILES_DIR/completions/docker-compose.bash
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is not available on PATH; cannot install packages." >&2
+  exit 1
 fi
 
-echo "Please check bin/darwin-install.sh for homebrew installs that need to be run"
-# brew install tmux
+# --- packages your shell / editor expect ---
+formulae=(
+  coreutils # path.sh: brew --prefix coreutils .../gnubin
+  neovim    # alias vi='nvim'; LazyVim
+  git
+)
+
+for f in "${formulae[@]}"; do
+  if brew list --formula "$f" &>/dev/null; then
+    echo "Already installed: $f"
+  else
+    echo "Installing: $f"
+    brew install "$f"
+  fi
+done

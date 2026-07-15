@@ -13,17 +13,20 @@ fi
 
 export GOPATH=$HOME/dev/golang
 
+# User prepend-path function to insert paths at the front of the PATH variable
 prepend-path "/bin"
 prepend-path "/usr/bin"
 prepend-path "$GOPATH/bin"
 prepend-path "/usr/local/bin"
 prepend-path "/usr/local/go/bin"
-is-executable brew && prepend-path "$(brew --prefix coreutils)/libexec/gnubin"
 prepend-path "$DOTFILES_DIR/bin"
 prepend-path "$HOME/bin"
 prepend-path "/sbin"
 prepend-path "/usr/sbin"
 prepend-path "/usr/local/sbin"
+prepend-path "/opt/homebrew/sbin"
+prepend-path "/opt/homebrew/bin"
+append-path "$(brew --prefix coreutils)/libexec/gnubin"
 
 # Remove duplicates (preserving prepended items)
 # Source: http://unix.stackexchange.com/a/40755

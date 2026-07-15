@@ -86,7 +86,7 @@ set smartcase        " ignore case if search is all lowercase, case sesnitive ot
 
 set wildmenu         " when using tab to autocomplete filenames, will show horizontal list of prev/next matches
 set clipboard=unnamed
-" set mouse=v
+set mouse=           " disable use of mouse in all vim/nvim modes
 set backspace=indent,eol,start  " backspace over everything
 
 set autowrite        " automatically write file contents when running make

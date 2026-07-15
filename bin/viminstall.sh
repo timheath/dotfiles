@@ -23,16 +23,16 @@ git clone https://github.com/tpope/vim-fugitive.git
 git clone https://github.com/vim-airline/vim-airline.git
 
 # Syntax, hightlighting, and format
-git clone https://github.com/vim-scripts/loremipsum.git $BUNDLE/loremipsum
-git clone https://github.com/scrooloose/syntastic.git $BUNDLE/syntastic
-git clone https://github.com/Raimondi/delimitMate.git $BUNDLE/delimitMate
-git clone https://github.com/fatih/vim-go.git $BUNDLE/vim-go
-git clone https://github.com/AndrewRadev/splitjoin.vim.git $BUNDLE/splitjoin.vim
-git clone https://github.com/SirVer/ultisnips.git $BUNDLE/ultisnips
+# git clone https://github.com/vim-scripts/loremipsum.git $BUNDLE/loremipsum
+# git clone https://github.com/scrooloose/syntastic.git $BUNDLE/syntastic
+# git clone https://github.com/Raimondi/delimitMate.git $BUNDLE/delimitMate
+# git clone https://github.com/fatih/vim-go.git $BUNDLE/vim-go
+# git clone https://github.com/AndrewRadev/splitjoin.vim.git $BUNDLE/splitjoin.vim
+# git clone https://github.com/SirVer/ultisnips.git $BUNDLE/ultisnips
 
 [ "$OS" = "Darwin" ] &&  git clone https://github.com/axiaoxin/vim-json-line-format.git
 
 # Completion & snippets
 
-git clone https://github.com/ervandew/supertab.git
-[ "$OS" = "Darwin" ] &&  git clone https://github.com/davidhalter/jedi-vim.git
+# git clone https://github.com/ervandew/supertab.git
+# [ "$OS" = "Darwin" ] &&  git clone https://github.com/davidhalter/jedi-vim.git

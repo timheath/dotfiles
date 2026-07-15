@@ -1,12 +1,8 @@
-#
-# credits
-# https://github.com/mathiasbynens/dotfiles
-
 # If not interactive, do nothing
 [ -z "$PS1" ] && return
 
 if [ -f ~/.bashrc ]; then
-    . ~/.bashrc
+  . ~/.bashrc
 fi
 
 OS="$(uname -s)"
@@ -27,28 +23,27 @@ fi
 
 # now source our dotfiles
 
-for DOTFILE in "$DOTFILES_DIR"/system/{functions,function_*,path,env,alias,completion,grep,prompt,nvm,rvm,custom}.sh; do
+for DOTFILE in "$DOTFILES_DIR"/system/{functions,function_*,path,env,alias,completion,grep,prompt,python-venv}.sh; do
   [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 
 # run os specific files
 
 for DOTFILE in "$DOTFILES_DIR"/system/*."$OS"; do
-    [ -f "$DOTFILE" ] && . "$DOTFILE"
+  [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 
 # source bash completion files from Homebrew
 for COMPLETION in /usr/local/etc/bash_completion.d/*.bash; do
-    [ -f "$COMPLETION" ] && . "$COMPLETION"
+  [ -f "$COMPLETION" ] && . "$COMPLETION"
 done
 unset COMPLETION
 
 # Source my local bash completion files
 for COMPLETION in "$DOTFILES_DIR"/completions/*.bash; do
-    [ -f "$COMPLETION" ] && . "$COMPLETION"
+  [ -f "$COMPLETION" ] && . "$COMPLETION"
 done
 unset COMPLETION
-
 
 # virtualenv wrapper
 
@@ -62,7 +57,15 @@ eval "$(dircolors "$DOTFILES_DIR"/system/dir_colors)"
 
 # enlighten me
 if $(is-executable fortune); then
-    echo ""
-    fortune
-    echo ""
+  echo ""
+  fortune
+  echo ""
 fi
+
+# Added by Antigravity
+export PATH="$PATH:/Users/tim/.antigravity/antigravity/bin"
+
+# Added by Tim for Claude Code
+export PATH="$PATH:/Users/tim/.local/bin"
+
+[[ -r ~/.bashrc ]] && source ~/.bashrc

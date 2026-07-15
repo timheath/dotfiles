@@ -1,9 +1,7 @@
 # dev shortcuts
-alias kata='cd ~/dev/projects/cpp-kata'
 
 alias sshkey='cat ~/.ssh/id_rsa.pub | pbcopy'
-#alias vi='vim'   
-alias vi='nvim'   
+alias vi='nvim'
 alias path='echo $PATH | tr ":" "\n" | sort'
 
 alias ll='ls -l --time-style=+"%Y-%m-%d %H:%M:%S" --color -h -a'
@@ -30,7 +28,13 @@ alias map="xargs -n1"
 alias reload="exec $SHELL -l"
 
 alias notes='vi ~/Notes'
-alias toto='vi ~/Notes/todo.md'  # easier to type than todo
-alias todo='vi ~/Notes/todo.md'  # easier to type than todo
+alias toto='vi ~/Notes/todo.md' # easier to type than todo
+alias todo='vi ~/Notes/todo.md' # easier to type than todo
+
+# Simplify python venv management
+# alias venv-create='python -m venv ~/.venvs/$1'        # Usage: venv-create myproject-env
+# alias venv-activate='source ~/.venvs/$1/bin/activate' # Usage: venv-activate myproject-env (Unix/macOS)
+# alias venv-list='ls ~/.venvs'                         # List all envs
+# alias venv-remove='rm -rf ~/.venvs/$1'                # Usage: venv-remove myproject-env (be careful!)
 
 alias golang='cd $GOPATH/src/github.com/timheath'
