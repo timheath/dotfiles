@@ -5,15 +5,10 @@ is-executable getconf && PATH=$(command -v getconf PATH)
 
 # Prepend new items to path (if directory exists)
 
-# redhat specific path elements
-if [ -f /etc/redhat-release ]; then
-    prepend-path "/usr/seos/bin"
-    prepend-path "/usr/lib64/qt-3.3/bin"
-fi
-
-export GOPATH=$HOME/dev/golang
-
 # User prepend-path function to insert paths at the front of the PATH variable
+prepend-path "$HOME/.local/bin"
+# Grok is special
+prepend-path "$HOME/.grok/bin"
 prepend-path "/bin"
 prepend-path "/usr/bin"
 prepend-path "$GOPATH/bin"
@@ -31,8 +26,9 @@ append-path "$(brew --prefix coreutils)/libexec/gnubin"
 # Remove duplicates (preserving prepended items)
 # Source: http://unix.stackexchange.com/a/40755
 
-PATH=`echo -n $PATH | awk -v RS=: '{ if (!arr[$0]++) {printf("%s%s",!ln++?"":":",$0)}}'`
+PATH=$(echo -n $PATH | awk -v RS=: '{ if (!arr[$0]++) {printf("%s%s",!ln++?"":":",$0)}}')
 
 # Wrap up
 
 export PATH
+export GOPATH=$HOME/dev/golang
