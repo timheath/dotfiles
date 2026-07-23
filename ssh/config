@@ -1,20 +1,6 @@
 Host *
   SetEnv TERM=xterm-256color
-Host pi
-    HostName 192.168.0.9
-    User tim
-Host pietv
-    HostName 192.168.0.12
-    User tim
-Host hermesvps
-  HostName 23.238.10.144
-  User hermes
-Host rootvps
-  HostName 23.238.10.144
-  User root
-Host roothostinger
-  HostName 2.24.116.48
-  User root
-Host timhostinger
-  HostName 2.24.116.48
-  User tim
+
+# Host-specific entries live in the private overlay (dotfiles-private).
+# Missing Include files are ignored by OpenSSH.
+Include ~/.ssh/config.local
