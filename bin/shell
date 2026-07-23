@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+#
+# Set the login shell to bash.
+# Prefers Homebrew bash on Darwin
+#
+
+resolve_bash() {
+  local candidates=()
+  local prefix
+
+  # Prefer brew bash when available
+  if command -v brew >/dev/null 2>&1; then
+    prefix="$(brew --prefix 2>/dev/null || true)"
+    if [[ -n "$prefix" && -x "${prefix}/bin/bash" ]]; then
+      candidates+=("${prefix}/bin/bash")
+    fi
+  fi
+  candidates+=(/bin/bash)
+
+  local p
+  for p in "${candidates[@]}"; do
+    if [[ -n "$p" && -x "$p" ]]; then
+      printf '%s\n' "$p"
+      return 0
+    fi
+  done
+  return 1
+}
+
+BASH_PATH="$(resolve_bash)" || {
+  echo "bash not found (checked brew prefix, /opt/homebrew/bin/bash, /bin/bash)" >&2
+  exit 1
+}
+
+current_shell() {
+  local shell=""
+  local os
+  os="$(uname -s)"
+
+  if [[ "$os" == "Darwin" ]]; then
+    # dscl is authoritative for the login shell on macOS
+    if command -v dscl >/dev/null 2>&1; then
+      shell="$(dscl . -read "/Users/$USER" UserShell 2>/dev/null | awk '{print $2}')" || true
+    fi
+  else
+    if command -v getent >/dev/null 2>&1; then
+      shell="$(getent passwd "$USER" 2>/dev/null | awk -F: '{print $NF}')" || true
+    fi
+    if [[ -z "$shell" && -r /etc/passwd ]]; then
+      shell="$(awk -F: -v u="$USER" '$1 == u { print $NF; exit }' /etc/passwd)" || true
+    fi
+  fi
+
+  if [[ -z "$shell" ]]; then
+    shell="${SHELL:-}"
+  fi
+  printf '%s\n' "$shell"
+}
+
+ensure_in_shells() {
+  local path="$1"
+  if [[ ! -r /etc/shells ]]; then
+    echo "Cannot read /etc/shells; continuing anyway." >&2
+    return 0
+  fi
+  if grep -qxF "$path" /etc/shells 2>/dev/null; then
+    return 0
+  fi
+  echo "Adding $path to /etc/shells (requires sudo)..."
+  echo "$path" | sudo tee -a /etc/shells >/dev/null
+}
+
+CURRENT="$(current_shell)"
+
+if [[ "$CURRENT" == "$BASH_PATH" ]]; then
+  echo "Login shell is already $BASH_PATH"
+  exit 0
+fi
+
+echo "Current login shell: ${CURRENT:-unknown}"
+echo "Setting login shell to $BASH_PATH..."
+
+ensure_in_shells "$BASH_PATH"
+
+if ! chsh -s "$BASH_PATH"; then
+  echo "chsh failed. You may need to run: chsh -s $BASH_PATH" >&2
+  exit 1
+fi
+
+echo "Login shell set to $BASH_PATH."
+echo "Open a new terminal (or re-login) for the change to take effect."

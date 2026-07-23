@@ -65,3 +65,7 @@ if command -v nvim >/dev/null 2>&1; then
 else
   echo "nvim not on PATH; skipped Lazy sync. Install neovim, then open nvim once or re-run this script." >&2
 fi
+
+# --- default shell (bash); may prompt for password ---
+printf "\nConfiguring default shell...\n"
+"$DOTFILES_DIR/bin/shell"

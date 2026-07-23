@@ -24,13 +24,6 @@ fi
 
 source $DOTFILES_DIR/system/functions.sh
 
-# Make bash default shell
-_SH=`grep $USER /etc/passwd|awk 'BEGIN { FS = ":"}; {print $NF}'`
-if [ $_SH != "/bin/bash" ]; then
-    printf "Changing shell to bash...\n"
-    chsh -s /bin/bash
-fi
-
 # Install git if not available
 if ! $(is-executable git); then
     printf "Installing git...\n"
