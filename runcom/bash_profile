@@ -62,10 +62,6 @@ if $(is-executable fortune); then
   echo ""
 fi
 
-# Added by Antigravity
-export PATH="$PATH:/Users/tim/.antigravity/antigravity/bin"
-
-# Added by Tim for Claude Code
-export PATH="$PATH:/Users/tim/.local/bin"
+export PATH="$PATH:$HOME/.local/bin"
 
 [[ -r ~/.bashrc ]] && source ~/.bashrc
