@@ -67,14 +67,14 @@ find_git_dirty() {
 # Update prompt for Darwin VMs
 prompt_marker=""
 case "$(sysctl -n hw.model 2>/dev/null)" in
-VirtualMac*) prompt_marker="☁️" ;;
+VirtualMac*) prompt_marker="☁️ " ;;
 esac
 
 # different prompt for Darwin and Linux
 PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
 OS=$(uname -s)
 if [ "$OS" = "Darwin" ]; then
-  export PS1="\u:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtblu\]❯ \[$txtrst\]"
+  export PS1="$prompt_marker\u:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtblu\]❯ \[$txtrst\]"
 else
   export PS1="\u@\h:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtblu\]❯ \[$txtrst\]"
 fi
