@@ -7,7 +7,6 @@ is-executable getconf && PATH=$(command -v getconf PATH)
 
 # User prepend-path function to insert paths at the front of the PATH variable
 prepend-path "$HOME/.local/bin"
-# Grok is special
 prepend-path "$HOME/.grok/bin"
 prepend-path "/bin"
 prepend-path "/usr/bin"

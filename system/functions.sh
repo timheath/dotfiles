@@ -122,9 +122,9 @@ mdcopy() {
   fi
 }
 
-# TODO create a quick function to convert to html which doesn't lose formatting like rtf
-# md2html() {
-#     if [ -f $1 ] && [ $(uname) == "Darwin" ]; then
-#         cat $1 | pandoc --from markdown_github --to html | textutil -convert rtf -stdin -stdout -format html| pbcopy -Prefer rtf
-#     fi
-# }
+# Ask grok from command line
+gq() {
+  command grok -p "$*" \
+    --max-turns 8 \
+    --rules "Answer directly and concisely. Prefer ready-to-run commands and short explanations. Skip preamble and offers to help further unless asked."
+}

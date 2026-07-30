@@ -45,11 +45,8 @@ for COMPLETION in "$DOTFILES_DIR"/completions/*.bash; do
 done
 unset COMPLETION
 
-# virtualenv wrapper
-
-#if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-#    source /usr/local/bin/virtualenvwrapper.sh
-#fi
+# Grok completions (moved from my bashrc)
+[[ -r "$HOME/.grok/completions/bash/grok.bash" ]] && source "$HOME/.grok/completions/bash/grok.bash"
 
 # Set LSCOLORS
 
@@ -63,5 +60,8 @@ if $(is-executable fortune); then
 fi
 
 export PATH="$PATH:$HOME/.local/bin"
+
+# Silence annoying apple nag 
+export BASH_SILENCE_DEPRECATION_WARNING=1
 
 [[ -r ~/.bashrc ]] && source ~/.bashrc
