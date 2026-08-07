@@ -50,7 +50,6 @@ link_private_overlays() {
 }
 
 # --- shell / ssh symlinks ---
-# ln -sfv "$DOTFILES_DIR/vim/vimrc" ~/.vimrc  # No longer using vim; kept under vim/ for posterity
 mkdir -p -m 700 "$HOME/.ssh"
 ln -sfv "$DOTFILES_DIR/runcom/bash_profile" ~/.bash_profile
 ln -sfv "$DOTFILES_DIR/runcom/inputrc" ~/.inputrc
@@ -67,11 +66,6 @@ link_private_overlays
 mkdir -p "$HOME/.config"
 NVIM_SRC="$DOTFILES_DIR/config/nvim"
 NVIM_DST="$HOME/.config/nvim"
-
-if [[ ! -d "$NVIM_SRC" ]]; then
-  echo "Missing LazyVim config at $NVIM_SRC" >&2
-  exit 1
-fi
 
 if [[ -L "$NVIM_DST" ]]; then
   current="$(readlink "$NVIM_DST")"
