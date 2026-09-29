@@ -74,7 +74,7 @@ esac
 PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
 OS=$(uname -s)
 if [ "$OS" = "Darwin" ]; then
-  export PS1="$prompt_marker\u:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtblu\]❯ \[$txtrst\]"
+  export PS1="$prompt_marker\u@\h:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtblu\]❯ \[$txtrst\]"
 else
   export PS1="\u@\h:\w\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtblu\]❯ \[$txtrst\]"
 fi
