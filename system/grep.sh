@@ -17,4 +17,6 @@ elif is-supported "echo | grep --exclude=.cvs ''"; then
 fi
 
 alias grep="grep $GREP_OPTIONS"
+# GREP_COLOR for BSD grep; GNU grep 3.8+ warns about it unless GREP_COLORS sets mt
 export GREP_COLOR='1;32'
+export GREP_COLORS='mt=1;32'

@@ -7,6 +7,46 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 OS="$(uname -s)"
 
+# Symlink src to dst. A real file/dir at dst is backed up first (plain `ln -s`
+# onto a real directory would create dst/<name> inside it instead).
+link() {
+  local src="$1" dst="$2" backup
+  if [[ -L "$dst" && "$(readlink "$dst")" == "$src" ]]; then
+    echo "Already linked: $dst -> $src"
+    return 0
+  fi
+  if [[ -e "$dst" && ! -L "$dst" ]]; then
+    backup="${dst}.bak.$(date +%Y%m%d%H%M%S)"
+    echo "Backing up $dst to $backup"
+    mv "$dst" "$backup"
+  fi
+  ln -sfnv "$src" "$dst"
+}
+
+# Source runcom/bashrc from ~/.bashrc: terminals (e.g. on Omarchy) start
+# non-login shells, which never read ~/.bash_profile. Appending (rather than
+# linking ~/.bashrc) keeps the distro/Omarchy defaults and installer additions.
+BASHRC_BEGIN="# >>> dotfiles >>>"
+BASHRC_END="# <<< dotfiles <<<"
+install_bashrc_hook() {
+  local rc="$HOME/.bashrc" line tmp
+  line="[[ -r \"$DOTFILES_DIR/runcom/bashrc\" ]] && . \"$DOTFILES_DIR/runcom/bashrc\""
+  touch "$rc"
+  if grep -qxF "$line" "$rc"; then
+    echo "Dotfiles already sourced from $rc"
+    return 0
+  fi
+  # Drop a stale block (e.g. repo moved) before appending the current one
+  if grep -qxF "$BASHRC_BEGIN" "$rc"; then
+    tmp="$(mktemp)"
+    awk -v b="$BASHRC_BEGIN" -v e="$BASHRC_END" '$0 == b { skip = 1 } !skip { print } $0 == e { skip = 0 }' "$rc" >"$tmp"
+    cat "$tmp" >"$rc"
+    rm -f "$tmp"
+  fi
+  echo "Adding dotfiles block to $rc"
+  printf '\n%s\n%s\n%s\n' "$BASHRC_BEGIN" "$line" "$BASHRC_END" >>"$rc"
+}
+
 # Optional overlay for private files from another repo
 PRIVATE_DIR="${DOTFILES_PRIVATE_DIR:-$HOME/dotfiles-private}"
 PRIVATE_URL="${DOTFILES_PRIVATE_URL:-git@github.com:timheath/dotfiles-private.git}"
@@ -43,7 +83,7 @@ link_private_overlays() {
   src="$PRIVATE_DIR/ssh/config.local"
   dst="$HOME/.ssh/config.local"
   if [[ -f "$src" ]]; then
-    ln -sfv "$src" "$dst"
+    link "$src" "$dst"
   else
     echo "No private SSH hosts file at $src (skipped)."
   fi
@@ -51,9 +91,10 @@ link_private_overlays() {
 
 # --- shell / ssh symlinks ---
 mkdir -p -m 700 "$HOME/.ssh"
-ln -sfv "$DOTFILES_DIR/runcom/bash_profile" ~/.bash_profile
-ln -sfv "$DOTFILES_DIR/runcom/inputrc" ~/.inputrc
-ln -sfv "$DOTFILES_DIR/ssh/config" ~/.ssh/config
+link "$DOTFILES_DIR/runcom/bash_profile" ~/.bash_profile
+link "$DOTFILES_DIR/runcom/inputrc" ~/.inputrc
+link "$DOTFILES_DIR/ssh/config" ~/.ssh/config
+install_bashrc_hook
 
 # --- private overlay (optional; host-specific SSH config, etc.) ---
 printf "\nCloning private dotfiles...\n"
@@ -61,31 +102,27 @@ sync_private_dotfiles
 link_private_overlays
 
 # --- Neovim (LazyVim) config ---
-# Important: if ~/.config/nvim is a real directory, plain `ln -s` creates
-# ~/.config/nvim/nvim instead of replacing it. Back up, then link.
 mkdir -p "$HOME/.config"
 NVIM_SRC="$DOTFILES_DIR/config/nvim"
-NVIM_DST="$HOME/.config/nvim"
+link "$NVIM_SRC" "$HOME/.config/nvim"
 
-if [[ -L "$NVIM_DST" ]]; then
-  current="$(readlink "$NVIM_DST")"
-  if [[ "$current" == "$NVIM_SRC" ]]; then
-    echo "Neovim config already linked: $NVIM_DST -> $NVIM_SRC"
-  else
-    echo "Updating Neovim config symlink ($current -> $NVIM_SRC)"
-    ln -sfnv "$NVIM_SRC" "$NVIM_DST"
+# Omarchy theme sync: link plugins/theme.lua (gitignored) to the active
+# Omarchy theme, like omarchy-nvim-setup does. Its presence also enables the
+# theme hot-reload and transparency in the nvim config.
+if [[ -n "${OMARCHY_PATH:-}" || -d /usr/share/omarchy ]]; then
+  # Omarchy 4 keeps the current theme under ~/.local/state, 3.x under ~/.config
+  theme_dir="$HOME/.local/state/omarchy/current/theme"
+  if [[ ! -d "$HOME/.local/state/omarchy/current" && -d "$HOME/.config/omarchy/current" ]]; then
+    theme_dir="$HOME/.config/omarchy/current/theme"
   fi
-elif [[ -e "$NVIM_DST" ]]; then
-  backup="${NVIM_DST}.bak.$(date +%Y%m%d%H%M%S)"
-  echo "Backing up existing Neovim config to $backup"
-  mv "$NVIM_DST" "$backup"
-  ln -sfnv "$NVIM_SRC" "$NVIM_DST"
-else
-  ln -sfnv "$NVIM_SRC" "$NVIM_DST"
+  ln -sfnv "$theme_dir/neovim.lua" "$NVIM_SRC/lua/plugins/theme.lua"
 fi
 
-# --- OS packages (Homebrew + neovim on Darwin) ---
-if [[ "$OS" == "Linux" ]]; then
+# --- OS packages (pacman on Arch, Homebrew + neovim on Darwin) ---
+if [[ "$OS" == "Linux" ]] && command -v pacman >/dev/null 2>&1; then
+  printf "\nInstalling Arch dependencies...\n"
+  "$DOTFILES_DIR/bin/arch-install.sh"
+elif [[ "$OS" == "Linux" ]]; then
   printf "\nInstalling Linux dependencies...\n"
   "$DOTFILES_DIR/bin/rhinstall.sh"
 elif [[ "$OS" == "Darwin" ]]; then

@@ -1,3 +1,6 @@
+# Keep the system defaults (Home/End, Ctrl-arrows, ...); ignored if missing
+$include /etc/inputrc
+
 # use vi for editing
 set editing-mode vi
 

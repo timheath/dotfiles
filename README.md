@@ -5,4 +5,6 @@ My config borrows heavily from the setups done by [Lars Kappert](https://github.
 
 
 ## Install
-Clone into your home dir and run install.sh
+Clone into your home dir and run install.sh. Re-run it after pulling changes (it's safe to run repeatedly).
+
+On Linux, install.sh appends a small block to `~/.bashrc` (terminals start non-login shells), so distro defaults stay in place. On [Omarchy](https://omarchy.org), Omarchy's bash defaults (Starship prompt, eza, zoxide, fzf, ...) are kept, with vi mode, 100k history, `lt` (eza by modification time) and `ltt` (tree) layered on top, and Neovim follows the active Omarchy theme.

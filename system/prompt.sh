@@ -1,3 +1,8 @@
+# On Linux, keep the Starship prompt when it's installed (Omarchy initializes it)
+if [[ "$(uname -s)" != "Darwin" ]] && command -v starship >/dev/null 2>&1; then
+  return
+fi
+
 # Regular
 txtblk="$(tput setaf 0 2>/dev/null || echo '\e[0;30m')" # Black
 txtred="$(tput setaf 1 2>/dev/null || echo '\e[0;31m')" # Red

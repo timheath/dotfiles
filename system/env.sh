@@ -2,8 +2,10 @@
 # EXPORTS
 #
 
-# Keep showing man page after exit
-export MANPAGER='less -X';
+# Keep showing man page after exit (Omarchy colors man pages with bat)
+if ! is-omarchy; then
+  export MANPAGER='less -X';
+fi
 
 # Increase Bash history size, omit duplicates and commands that begin with a space
 export HISTCONTROL=ignoreboth;
@@ -14,9 +16,11 @@ export HISTCONTROL='ignoreboth';
 # Append to the Bash history file, rather than overwriting it
 shopt -s histappend;
 
-# Prefer US English and use UTF-8
-export LC_ALL="en_US.UTF-8"
-export LANG="en_US"
+# Prefer US English and use UTF-8 (Omarchy sets the locale from /etc/locale.conf)
+if ! is-omarchy; then
+  export LC_ALL="en_US.UTF-8"
+  export LANG="en_US"
+fi
 
 # Highlight section titles in man pages
 export LESS_TERMCAP_md="${yellow}";

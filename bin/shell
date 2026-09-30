@@ -74,7 +74,8 @@ ensure_in_shells() {
 
 CURRENT="$(current_shell)"
 
-if [[ "$CURRENT" == "$BASH_PATH" ]]; then
+# -ef: same file, e.g. /bin/bash vs /usr/bin/bash on merged-/usr distros like Arch
+if [[ "$CURRENT" == "$BASH_PATH" || "$CURRENT" -ef "$BASH_PATH" ]]; then
   echo "Login shell is already $BASH_PATH"
   exit 0
 fi

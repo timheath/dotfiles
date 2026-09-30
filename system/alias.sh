@@ -4,11 +4,21 @@ alias sshkey='cat ~/.ssh/id_rsa.pub | pbcopy'
 alias vi='nvim'
 alias path='echo $PATH | tr ":" "\n" | sort'
 
-alias ll='ls -l --time-style=+"%Y-%m-%d %H:%M:%S" --color -h -a'
-alias lsz='ls -l | sort -k5'
-alias ls='ls --color'
-alias lt='ls -ltrh'
-alias la="ls -R |grep \":$\" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
+# `command ls` so these keep GNU ls flags/output even when ls is aliased (eza on Omarchy)
+alias ll='command ls -l --time-style=+"%Y-%m-%d %H:%M:%S" --color -h -a'
+alias lsz='command ls -l | sort -k5'
+alias la="command ls -R |grep \":$\" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
+
+if is-omarchy; then
+  # Keep Omarchy's ls (eza); lt lists by modification time, oldest first like ls -ltr
+  alias lt='eza -lh --icons=auto --sort=modified'
+  # Omarchy's original lt/lta (tree view)
+  alias ltt='eza --tree --level=2 --long --icons --git'
+  alias ltta='ltt -a'
+else
+  alias ls='ls --color'
+  alias lt='ls -ltrh'
+fi
 
 alias ..='cd ..'
 alias ...='cd ../..'

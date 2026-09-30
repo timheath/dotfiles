@@ -1,3 +1,8 @@
+# Omarchy (Arch + Hyprland) with its default bash config loaded
+is-omarchy() {
+  [[ -n ${OMARCHY_PATH:-} && -d $OMARCHY_PATH ]]
+}
+
 # Executable
 is-executable() {
   local BIN=$(command -v "$1" 2>/dev/null)
@@ -27,9 +32,13 @@ append-path() {
 }
 
 # Fuzzy find file/dir
-ff() { find . -type f -iname "$1"; }
+# Omarchy has its own ff (fzf preview) and ships the fd tool, so keep those there.
+# The `function` keyword stops an existing ff/fd alias from expanding here.
+if ! is-omarchy; then
+  function ff() { find . -type f -iname "$1"; }
+  function fd() { find . -type d -iname "$1"; }
+fi
 fff() { find . -type f -iname "*$1*"; }
-fd() { find . -type d -iname "$1"; }
 fdf() { find . -type d -iname "*$1*"; }
 
 # show weather forcast
