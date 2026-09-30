@@ -139,7 +139,8 @@ fi
 # --- LazyVim plugins: install, clean and update to latest (lazy-lock.json is per machine) ---
 if command -v nvim >/dev/null 2>&1; then
   printf "\nSyncing Neovim plugins (Lazy)...\n"
-  nvim --headless "+Lazy! sync" +qa
+  # ts-build.lua waits for the treesitter parser rebuild, which +qa would cut off
+  nvim --headless "+Lazy! sync" "+luafile $NVIM_SRC/scripts/ts-build.lua" +qa
   printf "Neovim plugin sync finished.\n"
 else
   echo "nvim not on PATH; skipped Lazy sync. Install neovim, then open nvim once or re-run this script." >&2
