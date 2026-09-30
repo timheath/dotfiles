@@ -7,3 +7,5 @@ foo.*
 *.log
 data
 lua/plugins/theme.lua
+# Plugin versions float per machine (install.sh runs `Lazy! sync`)
+lazy-lock.json

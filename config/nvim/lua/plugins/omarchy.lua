@@ -5,12 +5,13 @@
 -- change detection fires `LazyReload` when the theme changes, which the
 -- hot-reload plugin below uses to switch colorschemes in running instances.
 --
--- The colorscheme plugins are declared everywhere (lazy, so never loaded unless
--- a theme selects them) to keep lazy-lock.json the same on macOS and Linux.
--- The hot-reload plugin (and plugin/after/transparency.lua) are Omarchy-only.
+-- Everything here (and plugin/after/transparency.lua) is Omarchy-only: other
+-- machines have no theme.lua, so they don't install any of these plugins.
 
 local config_dir = vim.fn.stdpath("config")
-local is_omarchy = vim.uv.fs_lstat(config_dir .. "/lua/plugins/theme.lua") ~= nil
+if not vim.uv.fs_lstat(config_dir .. "/lua/plugins/theme.lua") then
+  return {}
+end
 
 local themes = {
   -- Omarchy 4 generates most theme specs from default/themed/neovim.lua.tpl on
@@ -39,10 +40,6 @@ local themes = {
   { "OldJobobo/retro-82.nvim", lazy = true, priority = 1000 },
   { "omacom-io/lumon.nvim", lazy = true, priority = 1000 },
 }
-
-if not is_omarchy then
-  return themes
-end
 
 table.insert(themes, {
   name = "theme-hotreload",
