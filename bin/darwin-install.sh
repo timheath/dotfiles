@@ -31,6 +31,7 @@ formulae=(
   coreutils # path.sh: brew --prefix coreutils .../gnubin
   neovim    # alias vi='nvim'; LazyVim
   git
+  jq        # claude/context-bar.sh
 )
 
 for f in "${formulae[@]}"; do

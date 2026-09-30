@@ -9,6 +9,7 @@ set -euo pipefail
 packages=(
   git
   curl
+  jq     # claude/context-bar.sh
   neovim # alias vi='nvim'; LazyVim
 )
 

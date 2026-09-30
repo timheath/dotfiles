@@ -146,6 +146,28 @@ else
   echo "nvim not on PATH; skipped Lazy sync. Install neovim, then open nvim once or re-run this script." >&2
 fi
 
+# --- Claude Code: status line script + shared settings ---
+# settings.json isn't linked: Claude Code rewrites it and it holds per-machine
+# state (plugins, effort), so claude/settings.json is merged in over it instead.
+printf "\nConfiguring Claude Code...\n"
+mkdir -p "$HOME/.claude/scripts"
+link "$DOTFILES_DIR/claude/context-bar.sh" "$HOME/.claude/scripts/context-bar.sh"
+if command -v jq >/dev/null 2>&1; then
+  settings="$HOME/.claude/settings.json"
+  [[ -s "$settings" ]] || echo '{}' >"$settings"
+  tmp="$(mktemp)"
+  jq -s '.[0] * .[1]' "$settings" "$DOTFILES_DIR/claude/settings.json" >"$tmp"
+  if cmp -s "$tmp" "$settings"; then
+    echo "Claude settings already up to date: $settings"
+  else
+    echo "Merging shared Claude settings into $settings"
+    cat "$tmp" >"$settings"
+  fi
+  rm -f "$tmp"
+else
+  echo "jq not on PATH; skipped Claude settings merge (the status line needs jq too)." >&2
+fi
+
 # --- default shell (bash); may prompt for password ---
 printf "\nConfiguring default shell...\n"
 "$DOTFILES_DIR/bin/shell"
