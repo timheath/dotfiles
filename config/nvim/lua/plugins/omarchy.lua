@@ -15,7 +15,8 @@ local is_omarchy = vim.uv.fs_lstat(config_dir .. "/lua/plugins/theme.lua") ~= ni
 local themes = {
   -- Omarchy 4 generates most theme specs from default/themed/neovim.lua.tpl on
   -- top of aether; the single-theme plugins (ethereal, vantablack, white,
-  -- monokai-pro, miasma) are only used by Omarchy 3.8 themes.
+  -- miasma) are only used by Omarchy 3.8 themes. (monokai-pro is left out:
+  -- its repo, gthelding/monokai-pro.nvim, no longer exists, so fresh clones fail.)
   { "ribru17/bamboo.nvim", lazy = true, priority = 1000 },
   -- Name and branch must match Omarchy 4's generated theme spec, or lazy
   -- re-clones it under a different directory on first launch.
@@ -30,7 +31,6 @@ local themes = {
   { "ellisonleao/gruvbox.nvim", lazy = true, priority = 1000 },
   { "rebelot/kanagawa.nvim", lazy = true, priority = 1000 },
   { "tahayvr/matteblack.nvim", lazy = true, priority = 1000 },
-  { "gthelding/monokai-pro.nvim", lazy = true, priority = 1000 },
   { "EdenEast/nightfox.nvim", lazy = true, priority = 1000 },
   { "rose-pine/neovim", name = "rose-pine", lazy = true, priority = 1000 },
   { "ficcdaf/ashen.nvim", lazy = true, priority = 1000 },
