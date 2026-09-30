@@ -56,6 +56,11 @@ if ! is-omarchy; then
   eval "$(dircolors "$DOTFILES_DIR"/system/dir_colors)"
 fi
 
+# config/nvim diverges from Omarchy's; flag its updates for review
+if is-omarchy && ! omarchy-nvim-diff --check; then
+  echo "omarchy-nvim was updated; run omarchy-nvim-diff to review"
+fi
+
 # enlighten me
 if $(is-executable fortune); then
   echo ""

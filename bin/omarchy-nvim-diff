@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+#
+# Show what Omarchy changed in its default Neovim config since I last looked.
+#
+# config/nvim diverges from Omarchy's LazyVim config (the omarchy-nvim
+# package), so its updates never reach ~/.config/nvim. vendor/omarchy-nvim
+# holds the version last reviewed; diffing it against the installed package
+# shows only upstream changes, to be picked into config/nvim by hand.
+#
+#   omarchy-nvim-diff           diff reviewed copy -> installed package
+#   omarchy-nvim-diff --accept  mark the installed package as reviewed
+#   omarchy-nvim-diff --check   exit 1 if the package changed since review
+#
+
+DOTFILES_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
+VENDOR_DIR="$DOTFILES_DIR/vendor/omarchy-nvim"
+UPSTREAM_DIR=/usr/share/omarchy-nvim/config
+# Plugin pins churn every release and config/nvim doesn't track its own
+EXCLUDE=lazy-lock.json
+
+installed_version() {
+  pacman -Q omarchy-nvim 2>/dev/null | awk '{print $2}'
+}
+
+installed="$(installed_version || true)"
+reviewed="$(cat "$VENDOR_DIR/VERSION" 2>/dev/null || true)"
+
+case "${1:-}" in
+  --check)
+    # Nothing to review without the package (not Omarchy, or uninstalled)
+    [[ -z $installed || $installed == "$reviewed" ]]
+    ;;
+  --accept)
+    [[ -n $installed ]] || { echo "omarchy-nvim is not installed." >&2; exit 1; }
+    rm -rf "$VENDOR_DIR/config"
+    mkdir -p "$VENDOR_DIR"
+    cp -r "$UPSTREAM_DIR" "$VENDOR_DIR/config"
+    rm -f "$VENDOR_DIR/config/$EXCLUDE"
+    echo "$installed" >"$VENDOR_DIR/VERSION"
+    echo "Marked omarchy-nvim $installed as reviewed. Commit vendor/omarchy-nvim to record it."
+    ;;
+  "")
+    [[ -n $installed ]] || { echo "omarchy-nvim is not installed." >&2; exit 1; }
+    echo "omarchy-nvim: reviewed ${reviewed:-none}, installed $installed"
+    if diff -ru -x "$EXCLUDE" "$VENDOR_DIR/config" "$UPSTREAM_DIR"; then
+      echo "No changes to review."
+    else
+      echo
+      echo "Pick what you want into config/nvim, then run: omarchy-nvim-diff --accept"
+    fi
+    ;;
+  *)
+    echo "Usage: omarchy-nvim-diff [--check | --accept]" >&2
+    exit 2
+    ;;
+esac
