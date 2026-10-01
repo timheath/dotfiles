@@ -4,9 +4,7 @@ alias sshkey='cat ~/.ssh/id_rsa.pub | pbcopy'
 alias vi='nvim'
 alias path='echo $PATH | tr ":" "\n" | sort'
 
-# `command ls` so these keep GNU ls flags/output even when ls is aliased (eza on Omarchy)
-alias ll='command ls -l --time-style=+"%Y-%m-%d %H:%M:%S" --color -h -a'
-alias lsz='command ls -l | sort -k5'
+# `command ls` so this keeps GNU ls flags/output even when ls is aliased (eza on Omarchy)
 alias la="command ls -R |grep \":$\" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 
 if is-omarchy; then
@@ -15,9 +13,18 @@ if is-omarchy; then
   # Omarchy's original lt/lta (tree view)
   alias ltt='eza --tree --level=2 --long --icons --git'
   alias ltta='ltt -a'
+  # ll/lsz as below, formatted by eza (-aa adds . and .., --binary matches ls -h sizes)
+  alias ll='eza -laa --links --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --icons=auto'
+  alias lsz='eza -l --only-files --sort=size --icons=auto'
 else
   alias ls='ls --color'
   alias lt='ls -ltrh'
+  alias ll='command ls -l --time-style=+"%Y-%m-%d %H:%M:%S" --color -h -a'
+  # Regular files only, smallest first (largest last). A function so a directory
+  # argument goes to ls, not grep. The `function` keyword stops an existing lsz
+  # alias expanding in the definition; unalias so it doesn't shadow the function
+  unalias lsz 2>/dev/null
+  function lsz { command ls -lShr "$@" | grep '^-'; }
 fi
 
 alias ..='cd ..'
