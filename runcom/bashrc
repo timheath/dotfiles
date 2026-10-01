@@ -21,35 +21,30 @@ else
   return # `exit 1` would quit the shell itself
 fi
 
-# now source our dotfiles
-
+# source dotfiles
 for DOTFILE in "$DOTFILES_DIR"/system/{functions,function_*,path,env,alias,completion,grep,prompt,python-venv}.sh; do
   [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 
 # run os specific files
-
 for DOTFILE in "$DOTFILES_DIR"/system/*."$OS"; do
   [ -f "$DOTFILE" ] && . "$DOTFILE"
 done
 unset DOTFILE
 
-# source bash completion files from Homebrew
-for COMPLETION in /usr/local/etc/bash_completion.d/*.bash; do
-  [ -f "$COMPLETION" ] && . "$COMPLETION"
-done
-unset COMPLETION
+# Homebrew bash-completion (macOS); Linux/Omarchy load bash-completion themselves
+#[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
-# Source my local bash completion files
-for COMPLETION in "$DOTFILES_DIR"/completions/*.bash; do
-  # Prefer the system's (newer) git completion when bash-completion provides it
-  [[ $COMPLETION == */git-completion.bash && -f /usr/share/bash-completion/completions/git ]] && continue
-  [ -f "$COMPLETION" ] && . "$COMPLETION"
-done
-unset COMPLETION
+# Source local bash completion files
+#for COMPLETION in "$DOTFILES_DIR"/completions/*.bash; do
+#  # Prefer the system's (newer) git completion when bash-completion provides it
+#  [[ $COMPLETION == */git-completion.bash && -f /usr/share/bash-completion/completions/git ]] && continue
+#  [ -f "$COMPLETION" ] && . "$COMPLETION"
+#done
+#unset COMPLETION
 
 # Grok completions (moved from my bashrc)
-[[ -r "$HOME/.grok/completions/bash/grok.bash" ]] && source "$HOME/.grok/completions/bash/grok.bash"
+#[[ -r "$HOME/.grok/completions/bash/grok.bash" ]] && source "$HOME/.grok/completions/bash/grok.bash"
 
 # Set LSCOLORS (Omarchy keeps its own ls/eza colors)
 if ! is-omarchy; then
