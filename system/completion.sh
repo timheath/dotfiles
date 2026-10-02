@@ -1,5 +1,11 @@
-# Homebrew's bash-completion (macOS); Linux/Omarchy load bash-completion themselves
-[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+# MacOS: point homebrew's completion loader at custom list of completions to load
+if [[ -r /opt/homebrew/etc/profile.d/bash_completion.sh &&
+  -z ${BASH_COMPLETION:-} ]]; then
+  # Load our dispatcher first so it can skip incompatible Homebrew completions.
+  BASH_COMPLETION_DIR="$DOTFILES_DIR/completions/homebrew"
+  BASH_COMPLETION_COMPAT_DIR="$BASH_COMPLETION_DIR"
+  . /opt/homebrew/etc/profile.d/bash_completion.sh
+fi
 
 # Source local bash completion files
 for COMPLETION in "$DOTFILES_DIR"/completions/*.bash; do
