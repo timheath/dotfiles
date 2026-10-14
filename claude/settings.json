@@ -2,5 +2,23 @@
   "statusLine": {
     "type": "command",
     "command": "~/.claude/scripts/context-bar.sh"
+  },
+  "enabledPlugins": {
+    "clangd-lsp@claude-plugins-official": true
+  },
+  "effortLevel": "medium",
+  "modelSettings": {
+    "claude-opus-5": {
+      "effortLevel": "high"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "attribution": {
+    "commit": "",
+    "pr": ""
   }
 }

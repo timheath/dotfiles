@@ -146,27 +146,29 @@ else
   echo "nvim not on PATH; skipped Lazy sync. Install neovim, then open nvim once or re-run this script." >&2
 fi
 
-# --- Claude Code: status line script + shared settings ---
-# settings.json isn't linked: Claude Code rewrites it and it holds per-machine
-# state (plugins, effort), so claude/settings.json is merged in over it instead.
+# --- Claude Code: status line script + settings ---
+# settings.json is linked so changes Claude Code makes (/config, /model,
+# plugins) show up in the repo as a git diff; it writes through the symlink.
+# A machine's existing file is merged into the repo copy first (repo values
+# win) and then backed up by link, so review the result with git diff.
 printf "\nConfiguring Claude Code...\n"
 mkdir -p "$HOME/.claude/scripts"
 link "$DOTFILES_DIR/claude/context-bar.sh" "$HOME/.claude/scripts/context-bar.sh"
-if command -v jq >/dev/null 2>&1; then
-  settings="$HOME/.claude/settings.json"
-  [[ -s "$settings" ]] || echo '{}' >"$settings"
-  tmp="$(mktemp)"
-  jq -s '.[0] * .[1]' "$settings" "$DOTFILES_DIR/claude/settings.json" >"$tmp"
-  if cmp -s "$tmp" "$settings"; then
-    echo "Claude settings already up to date: $settings"
+settings="$HOME/.claude/settings.json"
+repo_settings="$DOTFILES_DIR/claude/settings.json"
+if [[ -s "$settings" && ! -L "$settings" ]]; then
+  if command -v jq >/dev/null 2>&1; then
+    tmp="$(mktemp)"
+    jq -s '.[0] * .[1]' "$settings" "$repo_settings" >"$tmp"
+    cat "$tmp" >"$repo_settings"
+    rm -f "$tmp"
+    echo "Merged existing $settings into $repo_settings (review with git diff)"
   else
-    echo "Merging shared Claude settings into $settings"
-    cat "$tmp" >"$settings"
+    echo "jq not on PATH; $settings is backed up but not merged into the repo." >&2
   fi
-  rm -f "$tmp"
-else
-  echo "jq not on PATH; skipped Claude settings merge (the status line needs jq too)." >&2
 fi
+link "$repo_settings" "$settings"
+command -v jq >/dev/null 2>&1 || echo "jq not on PATH; the Claude status line needs it." >&2
 
 # --- default shell (bash); may prompt for password ---
 printf "\nConfiguring default shell...\n"
