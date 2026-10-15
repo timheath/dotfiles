@@ -146,7 +146,7 @@ else
   echo "nvim not on PATH; skipped Lazy sync. Install neovim, then open nvim once or re-run this script." >&2
 fi
 
-# --- Claude Code: status line script + settings ---
+# --- Claude Code: status line script, user CLAUDE.md + settings ---
 # settings.json is linked so changes Claude Code makes (/config, /model,
 # plugins) show up in the repo as a git diff; it writes through the symlink.
 # A machine's existing file is merged into the repo copy first (repo values
@@ -154,6 +154,7 @@ fi
 printf "\nConfiguring Claude Code...\n"
 mkdir -p "$HOME/.claude/scripts"
 link "$DOTFILES_DIR/claude/context-bar.sh" "$HOME/.claude/scripts/context-bar.sh"
+link "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 settings="$HOME/.claude/settings.json"
 repo_settings="$DOTFILES_DIR/claude/settings.json"
 if [[ -s "$settings" && ! -L "$settings" ]]; then
